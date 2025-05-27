@@ -1,0 +1,14 @@
+{% extends 'blogapp/base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+
+<h2>{{ post.title }}</h2>
+<p>{{ post.content }}</p>
+
+{% if post.is_private %}
+    <p><strong>This is a private post.</strong></p>
+{% else %}
+    <p><strong>This is a public post.</strong></p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'blogapp/base.html' %}
+
+
+{% block title %}All Blogs{% endblock %}
+{% block content %}
+
+<h2>Seemron ko लेख</h2>
+
+{% for post in posts %}
+    <div style="border: 1px solid #ccc; padding: 15px; margin: 10px;">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content|safe }}</p>
+
+        {% if not post.is_private %}
+            <!-- Public post: everyone can view -->
+            <a href="{% url 'blog_detail' post.id %}">Read More</a>
+        {% else %}
+            <!-- Private post -->
+            {% if request.session.user_email %}
+                       {% if post.has_access %}
+
+                    <!-- If user has access -->
+                    <a href="{% url 'blog_detail' post.id %}">Read More</a>
+                {% else %}
+                    <!-- Request access -->
+                    <form action="{% url 'request_access' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Request Access</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'request_access' %}">Login to Request Access</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endfor %}
+
+{% endblock %}
